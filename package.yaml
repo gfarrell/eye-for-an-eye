@@ -1,0 +1,48 @@
+name:                eye-for-an-eye
+version:             0.0.1.0
+github:              "gfarrell/eye-for-an-eye"
+license:             MIT
+author:              "Gideon Farrell"
+maintainer:          "gideon@gtf.io"
+copyright:           "2020 Gideon Farrell"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+# synopsis:            Evolutionary simulator for the prisoner's dilemma
+# category:            Experiments
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/gfarrell/eye-for-an-eye#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  eye-for-an-eye-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - eye-for-an-eye
+
+tests:
+  eye-for-an-eye-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - eye-for-an-eye
+    - hspec
