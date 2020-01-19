@@ -40,7 +40,7 @@ which, intending to do one action, does the opposite.
 ### Beg forgiveness
 
 `Agent`s can also have a tolerance of defections in their counteragents,
-by adjusting the `niceness` factor, which is the likelihood that
+by adjusting the `generosity` factor, which is the likelihood that
 an `Agent` will cooperate even in the face of a defection from the
 counteragent.
 

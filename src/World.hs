@@ -40,9 +40,7 @@ instance Show World where
       ++ shows (reproduction_multiplier w) ", "
       ++ shows (mistake_rate w) ", "
       ++ shows (initial_size w) ", "
-      ++ shows (iterations w) ", "
-      ++ "generator=<EventGenerator>"
-      ++ " }"
+      ++ shows (iterations w) " }"
 
 data Action = Cooperate | Defect
   deriving (Show, Eq)

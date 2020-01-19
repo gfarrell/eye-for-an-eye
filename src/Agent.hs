@@ -9,9 +9,14 @@ import World (World (..), Action (..), EventGenerator)
 import System.Random
 
 data Agent = Agent { react :: Reactor
-                   , niceness :: Double
+                   , generosity :: Double
                    , selfishness :: Double
                    }
+
+instance Show Agent where
+  show a = "Agent { "
+      ++ shows (generosity a) ", "
+      ++ shows (selfishness a) " }"
 
 type Reactor = Maybe Action -> Agent -> IO Action
 type ReactorFactory = World -> Reactor
@@ -41,5 +46,5 @@ probabilisticFactory w = probabilisticReactor
         probabilisticReactor Nothing me = weightedChoice gen (1 - selfishness me)
         probabilisticReactor (Just input) me =
           let p = case input of Cooperate -> 1 - selfishness me
-                                Defect    -> niceness me
+                                Defect    -> generosity me
           in weightedChoice gen p

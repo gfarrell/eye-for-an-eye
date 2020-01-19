@@ -18,7 +18,7 @@ import World (
 spec :: Spec
 spec = do
   describe "simpleReactor" $ do
-    let basic_agent = Agent {react=simpleReactor, niceness=0.0, selfishness=0.0 }
+    let basic_agent = Agent {react=simpleReactor, generosity=0.0, selfishness=0.0 }
     it "always cooperates on the first move" $ do
       res <- simpleReactor Nothing basic_agent
       shouldBe res Cooperate
@@ -33,7 +33,7 @@ spec = do
 
   describe "probabilistic reactions" $ do
     let mkAgent :: World -> Agent
-        mkAgent w = Agent { niceness=0.25
+        mkAgent w = Agent { generosity=0.25
                           , selfishness=0.25
                           , react=probabilisticFactory w
                           }
