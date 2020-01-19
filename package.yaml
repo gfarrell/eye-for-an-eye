@@ -20,6 +20,7 @@ description:         Please see the README on GitHub at <https://github.com/gfar
 
 dependencies:
 - base >= 4.7 && < 5
+- random >= 1.1
 
 library:
   source-dirs: src
@@ -34,6 +35,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - eye-for-an-eye
+    - random
 
 tests:
   eye-for-an-eye-test:
