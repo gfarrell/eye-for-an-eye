@@ -44,7 +44,7 @@ by adjusting the `niceness` factor, which is the likelihood that
 an `Agent` will cooperate even in the face of a defection from the
 counteragent.
 
-### It's a dog eat dog world
+### El vivo vive del bobo
 
 Some people might believe that by being selfish, one can get ahead, and
 therefore one should defect more often in the hope that some sucker
