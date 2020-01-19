@@ -1,7 +1,7 @@
 name:                eye-for-an-eye
 version:             0.0.1.0
 github:              "gfarrell/eye-for-an-eye"
-license:             MIT
+license:             BSD3
 author:              "Gideon Farrell"
 maintainer:          "gideon@gtf.io"
 copyright:           "2020 Gideon Farrell"
