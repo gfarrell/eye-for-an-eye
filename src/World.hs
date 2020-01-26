@@ -1,6 +1,5 @@
 module World (
     World (..),
-    Action (..),
     RewardsVector (..),
     EventGenerator,
     genEvent,
@@ -41,9 +40,6 @@ instance Show World where
       ++ shows (mistake_rate w) ", "
       ++ shows (initial_size w) ", "
       ++ shows (iterations w) " }"
-
-data Action = Cooperate | Defect
-  deriving (Show, Eq)
 
 type EventGenerator = IO Double
 genEvent :: EventGenerator
