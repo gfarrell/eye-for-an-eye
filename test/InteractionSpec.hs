@@ -4,7 +4,9 @@ import Test.Hspec
 import Interaction (
   simpleFactory,
   probabilisticFactory,
-  Action (..)
+  Action (..),
+  Interaction (..),
+  interactionFactory
   )
 
 import Agent (
@@ -81,3 +83,20 @@ spec = do
       rs <- mapM (\react -> react Nothing agent2) w2s
       shouldBe (length . filter (Cooperate ==) $ rs) 3
       shouldBe (length . filter (Defect ==) $ rs) 1
+
+  describe "interactions" $
+    it "generates an Action based on the counter-Agent's history" $ do
+      let react = simpleFactory . mkWorld $ 0.1
+          a1    = Agent { name=1, generosity=0, selfishness=0 }
+          a2    = Agent { name=2, generosity=0, selfishness=0 }
+          a3    = Agent { name=3, generosity=0, selfishness=0 }
+          a4    = Agent { name=4, generosity=0, selfishness=0 }
+          a2hst = (a2, [Interaction 2 1 Cooperate])
+          a3hst = (a3, [Interaction 3 1 Defect])
+          a4hst = (a4, []) :: (Agent, [Interaction])
+      r1 <- interactionFactory react a1 a2hst
+      r2 <- interactionFactory react a1 a3hst
+      r3 <- interactionFactory react a1 a4hst
+      shouldBe r1 Cooperate
+      shouldBe r2 Defect
+      shouldBe r3 Cooperate

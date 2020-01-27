@@ -1,8 +1,9 @@
 module Interaction (
   simpleFactory,
   probabilisticFactory,
-  interact,
-  Action (..)
+  Action (..),
+  interactionFactory,
+  Interaction (..)
 ) where
 
 import World (
@@ -76,3 +77,33 @@ probabilisticFactory w = probabilisticReactor
             if x > p_mistake then act else
               case a of Cooperate -> return Defect
                         Defect    -> return Cooperate
+
+--
+-- This section it all about interactions between Agents
+--
+
+data Interaction = Interaction AgentID AgentID Action
+type InteractionHistory = (Agent, [Interaction])
+
+-- Find the last Action by the counter-Agent with respect to the given
+-- Agent from within the counter-Agent's Interaction history.
+findPreviousAction :: Agent -> [Interaction] -> Maybe Action
+findPreviousAction agent interactions =
+  let found = filter (\i -> Agent.name agent == getAgent i) interactions
+  in case length found of 0 -> Nothing
+                          _ -> Just (getAction . head $ found)
+  where
+    getAgent :: Interaction -> AgentID
+    getAgent (Interaction _ a _) = a
+    getAction :: Interaction -> Action
+    getAction (Interaction _ _ a) = a
+
+notMine :: Agent -> [InteractionHistory] -> [InteractionHistory]
+notMine me = filter (\ (a, _) -> me /= a)
+
+-- Given a Reactor function, this generates an interact function which
+-- takes an Agent, and then a counter-Agent's InteractionHistory, and
+-- generates an Action using the Reactor function.
+interactionFactory :: Reactor -> Agent -> InteractionHistory -> IO Action
+interactionFactory react = interact'
+  where interact' me (_, hist) = react (findPreviousAction me hist) me
