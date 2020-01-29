@@ -64,21 +64,18 @@ weightedChoice gen p = do
 -- counter-Agent). There is also a `mistake_rate` in the world which
 -- can flip the Action to its opposite.
 probabilisticFactory :: ReactorFactory
-probabilisticFactory w = probabilisticReactor
-  where gen = generator w
-        p_mistake = mistake_rate w
-        probabilisticReactor :: Reactor
-        probabilisticReactor input me =
-          let p   = case input of (Just Cooperate) -> 1 - selfishness me
-                                  (Just Defect)    -> generosity me
-                                  Nothing          -> 1 - selfishness me
-              act = weightedChoice gen p
-          in do
-            x <- gen
-            a <- act
-            if x > p_mistake then act else
-              case a of Cooperate -> return Defect
-                        Defect    -> return Cooperate
+probabilisticFactory w input me =
+  let gen = generator w
+      p   = case input of (Just Cooperate) -> 1 - selfishness me
+                          (Just Defect)    -> generosity me
+                          Nothing          -> 1 - selfishness me
+      act = weightedChoice gen p
+  in do
+    x <- gen
+    a <- act
+    if x > mistake_rate w then act else
+      case a of Cooperate -> return Defect
+                Defect    -> return Cooperate
 
 --
 -- This section it all about interactions between Agents
