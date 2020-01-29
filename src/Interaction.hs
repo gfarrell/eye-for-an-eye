@@ -3,7 +3,9 @@ module Interaction (
   probabilisticFactory,
   Action (..),
   interactionFactory,
-  Interaction (..)
+  interactAll,
+  Interaction (..),
+  InteractionHistory
 ) where
 
 import World (
@@ -83,20 +85,24 @@ probabilisticFactory w = probabilisticReactor
 --
 
 data Interaction = Interaction AgentID AgentID Action
+  deriving (Show, Eq)
 type InteractionHistory = (Agent, [Interaction])
+
+-- Some helper functions for getting things out of Interactions
+getSubject :: Interaction -> AgentID
+getSubject (Interaction a _ _) = a
+getObject :: Interaction -> AgentID
+getObject (Interaction _ a _) = a
+getAction :: Interaction -> Action
+getAction (Interaction _ _ a) = a
 
 -- Find the last Action by the counter-Agent with respect to the given
 -- Agent from within the counter-Agent's Interaction history.
 findPreviousAction :: Agent -> [Interaction] -> Maybe Action
 findPreviousAction agent interactions =
-  let found = filter (\i -> Agent.name agent == getAgent i) interactions
+  let found = filter (\i -> Agent.name agent == getObject i) interactions
   in case length found of 0 -> Nothing
                           _ -> Just (getAction . head $ found)
-  where
-    getAgent :: Interaction -> AgentID
-    getAgent (Interaction _ a _) = a
-    getAction :: Interaction -> Action
-    getAction (Interaction _ _ a) = a
 
 notMine :: Agent -> [InteractionHistory] -> [InteractionHistory]
 notMine me = filter (\ (a, _) -> me /= a)
@@ -104,6 +110,20 @@ notMine me = filter (\ (a, _) -> me /= a)
 -- Given a Reactor function, this generates an interact function which
 -- takes an Agent, and then a counter-Agent's InteractionHistory, and
 -- generates an Action using the Reactor function.
-interactionFactory :: Reactor -> Agent -> InteractionHistory -> IO Action
-interactionFactory react = interact'
-  where interact' me (_, hist) = react (findPreviousAction me hist) me
+interactionFactory :: Reactor -> Agent -> InteractionHistory -> IO Interaction
+interactionFactory react me (other, hist) = do
+    action <- react (findPreviousAction me hist) me
+    return (Interaction (name me) (name other) action)
+
+-- Given a Reactor function, this acts on a list of InteractionHistories
+-- and interacts each agent with each other agent, providing the next
+-- iteration of the InteractionHistories.
+interactAll :: Reactor -> [InteractionHistory] -> IO [InteractionHistory]
+interactAll react histories = interactAll' histories
+  where interactAll' :: [InteractionHistory] -> IO [InteractionHistory]
+        interactAll' []           = return []
+        interactAll' ((me, _):hs) = do
+          -- TODO: this implementation feels ugly with all the unboxing of IO
+          new_histories  <- sequence [interactionFactory react me x | x <- histories, fst x /= me]
+          tail_histories <- interactAll' hs
+          return ((me, new_histories) : tail_histories)
