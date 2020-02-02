@@ -5,20 +5,20 @@ module Interaction (
   interactionFactory,
   interactAll,
   Interaction (..),
-  InteractionHistory
+  InteractionHistory,
+  Reactor
 ) where
 
 import World (
   World (..),
   EventGenerator,
+  RewardsVector
   )
 
 import Agent (
   Agent (..),
   AgentID
   )
-
-import System.Random
 
 -- Actions describe how Agents behave to one another. As such, every
 -- Action has a subject and an object when used. An Agent (subject) can

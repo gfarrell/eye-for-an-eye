@@ -23,7 +23,7 @@ import World (
   )
 
 mkAgent :: AgentID -> Agent
-mkAgent n = Agent { name=n, generosity=0, selfishness=0 }
+mkAgent n = Agent { name=n, generosity=0, selfishness=0, score=0 }
 mkWorld :: Double -> World
 mkWorld v = World { reproduction_multiplier=0
                   , rewards=RewardsVector 0 0 0 0
@@ -50,6 +50,7 @@ spec = do
     let agent = Agent { name=1
                       , generosity=0
                       , selfishness=0
+                      , score=0
                       }
     it "always cooperate on the first move" $ do
       res <- simpleFactory (mkWorld 1) Nothing agent
@@ -67,6 +68,7 @@ spec = do
     let agent = Agent { name=1
                       , generosity=0.25
                       , selfishness=0.25
+                      , score=0
                       }
         vs    = [0.2, 0.4, 0.6, 0.8] :: [Double]
         ws    = map (probabilisticFactory . mkWorld) vs
@@ -89,7 +91,7 @@ spec = do
       check 3 1 rs
 
     it "sometimes mess up" $ do
-      let agent2 = Agent { name=2, generosity=0, selfishness=0 }
+      let agent2 = Agent { name=2, generosity=0, selfishness=0, score=0 }
           w2s    = map (probabilisticFactory . mkFaultyWorld) vs
       rs <- mapM (\react -> react Nothing agent2) w2s
       check 3 1 rs
