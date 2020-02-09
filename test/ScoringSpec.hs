@@ -3,15 +3,16 @@ module ScoringSpec (spec) where
 import Test.Hspec
 
 import Scoring (
-  Interaction (..),
-  findMyInteractions,
-  findInteraction,
   score,
   scoreAgentInteractions
   )
 
-import Interaction (
+import React (
   Action (..)
+  )
+
+import Interaction (
+  Interaction (..)
   )
 
 import World (
@@ -20,36 +21,6 @@ import World (
 
 spec :: Spec
 spec = do
-  describe "findMyInteractions" $
-    it "finds all interactions for a given AgentID" $ do
-      let as = [ Interaction 1 2 Cooperate Cooperate
-               , Interaction 2 3 Cooperate Cooperate
-               , Interaction 5 4 Cooperate Cooperate
-               , Interaction 5 1 Cooperate Cooperate
-               ]
-      shouldBe (findMyInteractions 1 as)
-               [ Interaction 1 2 Cooperate Cooperate
-               , Interaction 5 1 Cooperate Cooperate
-               ]
-      shouldBe (findMyInteractions 2 as)
-               [ Interaction 1 2 Cooperate Cooperate
-               , Interaction 2 3 Cooperate Cooperate
-               ]
-
-  describe "findInteraction" $ do
-    let as = [ Interaction 1 2 Cooperate Cooperate
-           , Interaction 2 3 Cooperate Cooperate
-           , Interaction 5 4 Cooperate Cooperate
-           , Interaction 5 1 Cooperate Cooperate
-           ]
-    it "finds a the first interaction for a pair of agents" $ do
-      shouldBe (findInteraction 1 5 as)
-               (Just (Interaction 5 1 Cooperate Cooperate))
-      shouldBe (findInteraction 5 1 as)
-               (Just (Interaction 5 1 Cooperate Cooperate))
-    it "returns Nothing if no interaction exists" $
-      shouldBe (findInteraction 1 4 as) Nothing
-
   describe "score" $ do
     let vec = RewardsVector 2 4 6 8
     it "correctly applies a RewardsVector to an Interaction" $ do
