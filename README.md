@@ -50,3 +50,8 @@ Some people might believe that by being selfish, one can get ahead, and
 therefore one should defect more often in the hope that some sucker
 cooperates anyway. The `selfishness` factor of an `Agent` is the
 propensity to defect no matter what.
+
+### Fitness inheritance
+
+In this model, children inherit scores from their parents, to mimic how
+advantage and disadvantage can be inherited in the real world.
