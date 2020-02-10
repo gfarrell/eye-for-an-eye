@@ -29,17 +29,17 @@ import System.Random
 data World = World { reproduction_multiplier :: Double
                    , rewards :: RewardsVector
                    , mistake_rate :: Double
-                   , initial_size :: Integer
-                   , iterations :: Integer
+                   , initial_size :: Int
+                   , iterations :: Int
                    , generator :: EventGenerator
                    }
 
 instance Show World where
   show w = "World { "
-      ++ shows (reproduction_multiplier w) ", "
-      ++ shows (mistake_rate w) ", "
-      ++ shows (initial_size w) ", "
-      ++ shows (iterations w) " }"
+      ++ "reproduction_multiplier: " ++ shows (reproduction_multiplier w) ", "
+      ++ "mistake_rate: " ++ shows (mistake_rate w) ", "
+      ++ "initial_size: " ++ shows (initial_size w) ", "
+      ++ "iterations: " ++ shows (iterations w) " }"
 
 type EventGenerator = IO Double
 genEvent :: EventGenerator
