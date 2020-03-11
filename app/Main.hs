@@ -37,9 +37,9 @@ main :: IO ()
 main = do
   let world = World { mistake_rate=0.1
                     , initial_size=50
-                    , iterations=50
+                    , iterations=16
                     , generator=genEvent
-                    , rewards=RewardsVector 10 (-2) 15 (-5)
+                    , rewards=RewardsVector 1 (-2) 2 (-1)
                     , reproduction_assumptions=basicReproAssumptions
                     }
       reactor = probabilisticFactory world

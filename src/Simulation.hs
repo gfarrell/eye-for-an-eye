@@ -30,6 +30,10 @@ import Scoring (
   scoreAgents
   )
 
+import Reproduce (
+  reproduceAll
+  )
+
 import System.Random
 
 type AgentCreator = AgentID -> IO Agent
@@ -82,12 +86,12 @@ data Frame = Frame AgentID [Agent] [Interaction]
 
 -- Generate the next Frame from the current one, including scoring the
 -- Agents based on the outcomes *in this Frame*.
--- TODO: add in reproduction.
 nextFrame :: Reactor -> World -> Frame -> IO Frame
 nextFrame react w (Frame i agents history) = do
   interactions <- interactAll react history agents
   let scoredAgents = scoreAgents (rewards w) interactions agents
-  return (Frame i scoredAgents interactions)
+  finalAgentsList <- reproduceAll (generator w) (reproduction_assumptions w) scoredAgents
+  return (Frame i finalAgentsList interactions)
 
 -- Iterate over IO lists to prevent recalculation of every step.
 -- See https://stackoverflow.com/q/60137468

@@ -87,7 +87,9 @@ reproduce gen assumptions scoreRange maxId agent = do
 --
 -- Takes a list of Agents, ReproductionAssumptions, and an
 -- EventGenerator and then returns a new list (or IO [Agent]) in which
--- some Agents will have reproduced.
+-- some Agents will have reproduced. This has to be "recursive" like
+-- this because we need the maxId state to be maintained.
+-- TODO: Maybe we can encapsulate this state (and the world?) in a Monad?
 
 reproduceAll :: EventGenerator -> ReproductionAssumptions -> [Agent] -> IO [Agent]
 reproduceAll gen assumptions agents = run' (1 + (maximum . map name $ agents)) agents
