@@ -17,7 +17,8 @@ import React (
   )
 
 import World (
-  World (..)
+  World (..),
+  ReproductionAssumptions (..)
   )
 
 import Interaction (

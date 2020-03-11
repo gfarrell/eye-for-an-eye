@@ -10,23 +10,24 @@ import Agent (
 import World (
   World (..),
   RewardsVector (..),
-  deterministicGenEvent
+  deterministicGenEvent,
+  basicReproAssumptions
   )
 
 mkWorld :: Double -> World
-mkWorld v = World { reproduction_multiplier=0
-                  , rewards=RewardsVector 0 0 0 0
+mkWorld v = World { rewards=RewardsVector 0 0 0 0
                   , mistake_rate=0
                   , initial_size=1
                   , iterations=1
                   , generator=deterministicGenEvent v
+                  , reproduction_assumptions=basicReproAssumptions
                   }
-mkFaultyWorld v = World { reproduction_multiplier=0
-                        , rewards=RewardsVector 0 0 0 0
+mkFaultyWorld v = World { rewards=RewardsVector 0 0 0 0
                         , mistake_rate=0.25
                         , initial_size=1
                         , iterations=1
                         , generator=deterministicGenEvent v
+                        , reproduction_assumptions=basicReproAssumptions
                         }
 
 spec :: Spec

@@ -3,7 +3,9 @@ module World (
     RewardsVector (..),
     EventGenerator,
     genEvent,
-    deterministicGenEvent
+    deterministicGenEvent,
+    ReproductionAssumptions (..),
+    basicReproAssumptions
 ) where
 
 import System.Random
@@ -12,9 +14,6 @@ import System.Random
 -- ---------------------
 --
 -- Parameters:
---   reproduction_multiplier dictates the influence of the agent's score
---   on reproductive success
---
 --   rewards contains a vector of reward additives for different scenarios
 --
 --   mistake_rate indicates the probability of an intended action
@@ -26,20 +25,21 @@ import System.Random
 --
 --   generator is a random event generator (a Double between 0 and 1)
 --
-data World = World { reproduction_multiplier :: Double
-                   , rewards :: RewardsVector
-                   , mistake_rate :: Double
-                   , initial_size :: Int
-                   , iterations :: Int
-                   , generator :: EventGenerator
-                   }
+data World = World {
+  rewards :: RewardsVector
+, mistake_rate :: Double
+, initial_size :: Int
+, iterations :: Int
+, generator :: EventGenerator
+, reproduction_assumptions :: ReproductionAssumptions
+}
 
 instance Show World where
   show w = "World { "
-      ++ "reproduction_multiplier: " ++ shows (reproduction_multiplier w) ", "
+      ++ "rewards: " ++ shows (rewards w) ", "
       ++ "mistake_rate: " ++ shows (mistake_rate w) ", "
       ++ "initial_size: " ++ shows (initial_size w) ", "
-      ++ "iterations: " ++ shows (iterations w) " }"
+      ++ "iterations: " ++ shows (iterations w) ", "
 
 type EventGenerator = IO Double
 genEvent :: EventGenerator
@@ -62,3 +62,18 @@ deterministicGenEvent result = detGenEvent
 data RewardsVector =
   RewardsVector Double Double Double Double
   deriving Show
+
+data ReproductionAssumptions = ReproductionAssumptions {
+  minReproProb :: Double
+, maxReproProb :: Double
+, getMinScoreScale :: Double -> Double
+, getMaxScoreScale :: Double -> Double
+-- do we need reproduction_multiplier?
+}
+
+basicReproAssumptions = ReproductionAssumptions {
+  minReproProb = 0.1
+, maxReproProb = 0.9
+, getMinScoreScale = (/ 2)
+, getMaxScoreScale = (* 2)
+}

@@ -9,7 +9,8 @@ import Simulation (
 import World (
   World (..),
   RewardsVector (..),
-  genEvent
+  genEvent,
+  basicReproAssumptions
   )
 
 import Interaction (
@@ -34,12 +35,12 @@ getInteractions (Frame _ _ interactions) = interactions
 
 main :: IO ()
 main = do
-  let world = World { reproduction_multiplier=0.25
-                    , mistake_rate=0.1
+  let world = World { mistake_rate=0.1
                     , initial_size=50
                     , iterations=50
                     , generator=genEvent
                     , rewards=RewardsVector 10 (-2) 15 (-5)
+                    , reproduction_assumptions=basicReproAssumptions
                     }
       reactor = probabilisticFactory world
   putStrLn "Running Simulation with parameters:"
