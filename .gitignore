@@ -1,4 +1,4 @@
 .stack-work/
 eye-for-an-eye.cabal
-*_data/*.csv
+*_data
 *~

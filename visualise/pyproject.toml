@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "eye-for-an-eye--visualiser"
+version = "0.1.0"
+description = ""
+authors = ["Gideon Farrell <gideon@gtf.io>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+matplotlib = "^3.2.1"
+ipython = "^7.13.0"
+numpy = "^1.18.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = "^19.10b0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
